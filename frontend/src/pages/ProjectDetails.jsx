@@ -239,7 +239,11 @@ const ProjectDetails = () => {
                                                 value={task.status} 
                                                 onChange={(e) => handleUpdateTaskStatus(task._id, e.target.value)}
                                                 className="bg-white text-xs text-gray-900 rounded-md px-2 py-1 border border-gray-300 focus:ring-1 focus:ring-blue-500 outline-none cursor-pointer"
-                                                disabled={user?.role !== 'Admin' && task.assignedTo?._id !== user?._id}
+                                                disabled={
+                                                    user?.role !== 'Admin' && 
+                                                    project.owner?._id !== user?._id &&
+                                                    !project.members.some(m => m._id === user?._id)
+                                                }
                                             >
                                                 <option value="To Do">To Do</option>
                                                 <option value="In Progress">In Progress</option>
@@ -254,16 +258,19 @@ const ProjectDetails = () => {
                                             </div>
                                         )}
                                         
-                                        {(user?.role === 'Admin' || task.assignedTo?._id === user?._id) && (
+                                        {(user?.role === 'Admin' || project.owner?._id === user?._id || project.members.some(m => m._id === user?._id)) && (
                                             <div className="relative mt-2">
                                                 <input 
                                                     type="text" 
                                                     placeholder="Add quick update & press Enter..."
                                                     className="w-full bg-white border border-gray-300 text-xs rounded-lg px-3 py-2 text-gray-900 placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:bg-gray-50 transition-all outline-none"
                                                     onKeyDown={(e) => {
-                                                        if (e.key === 'Enter' && e.target.value.trim() !== '') {
-                                                            handleUpdateTaskNote(task._id, e.target.value);
-                                                            e.target.value = '';
+                                                        if (e.key === 'Enter') {
+                                                            e.preventDefault();
+                                                            if (e.target.value.trim() !== '') {
+                                                                handleUpdateTaskNote(task._id, e.target.value);
+                                                                e.target.value = '';
+                                                            }
                                                         }
                                                     }}
                                                 />
