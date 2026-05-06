@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    axios.defaults.baseURL = 'http://localhost:5001/api';
+    axios.defaults.baseURL = 'https://task-management-u5cy.onrender.com/api';
     axios.defaults.withCredentials = true;
 
     useEffect(() => {
