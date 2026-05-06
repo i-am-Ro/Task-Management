@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: [process.env.FRONTEND_URL, 'https://courageous-gumption-fac1c6.netlify.app', 'http://localhost:5173'].filter(Boolean),
     credentials: true,
 }));
 app.use(express.json());
